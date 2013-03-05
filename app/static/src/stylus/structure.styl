@@ -1,0 +1,98 @@
+.page
+  margin: 0 auto
+  width: 790px
+
+.header
+  margin: 5em
+  text-align: center
+
+.urls
+  width: 800px
+  overflow: auto
+
+.url
+  text-align: center
+  width: 188px
+  float: left
+  margin-right: 10px
+  margin-bottom: 20px
+  overflow: hidden
+  background: dnavy
+  border-radius: 5px
+
+  h2, h3, h4
+    reset-box-model()
+    font-weight: 300
+
+  .content
+    height: 190px
+    position: relative
+    cursor: pointer
+
+    h2
+      position: absolute
+      top: 15px
+      width: 188px
+      font-size: 2em
+
+    h3
+      position: absolute
+      bottom: 20px
+      width: 188px
+      font-size: 1.5em
+
+  .link
+    height: 40px
+    line-height: 40px
+    background: navy
+
+    a
+      text-decoration: none
+      color: white
+
+.modal
+  position: fixed
+  top: 50%
+  left: 50%
+  margin-left: -325px
+  margin-top: -165px
+  width: 570px
+  padding: 20px
+  
+  box-shadow: 0 0 10px rgba(0,0,0,.30)
+  border-radius: 5px
+  background: bg
+  color: lighten(notblack, 15)
+
+  h2
+    reset-box-model()
+    font-weight: 300
+    font-size: 1.6em
+    margin-bottom: 1em
+
+  h3
+    font-weight: 300
+
+  input[type='email']
+    width: 530px
+
+  .warnings
+    margin: 2em 0
+
+    label
+      display: inline-block
+      margin-right: 10px
+
+  .actions
+    font-size: .8em
+    text-align: right
+    position: relative
+
+    .remove
+      position: absolute
+      left: 0
+      background: #E63D5F
+
+    .cancel
+      background: silver
+      margin-left: 5px
