@@ -1,30 +1,23 @@
 var fs = require('fs');
+var arrr = require('arrr');
+var settings = require('../settings');
 
-var domains = [];
+var urls = [];
 
-var file = __dirname + '/../settings.json';
+var file = settings.get().data_file;
 
 try {
   var data = fs.readFileSync(file);
 
   if (data.length !== 0) {
-    domains = JSON.parse(data);
+    urls = JSON.parse(data);
   }
 } catch (e) {}
 
-var data = {
+var data = arrr(urls, 'url');
 
-  create: function (body, callback) {
-    domains.push(body);
-    callback(null, body);
-
-    fs.writeFile(file, JSON.stringify(domains));
-  },
-
-  all: function () {
-    return domains;
-  },
-
-};
+data.on('change', function () {
+  fs.writeFile(file, JSON.stringify(urls));
+});
 
 module.exports = data;

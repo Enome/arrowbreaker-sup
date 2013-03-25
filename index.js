@@ -1,19 +1,28 @@
-var app = require('./app');
-var socket = require('./app/socket');
-var socketio = require('socket.io');
+var sup = function (_settings) {
 
-var sup = {
+  var settings = require('./settings');
+  settings.set(_settings);
 
-  app: function () {
-    return app;
-  },
+  var app = require('./app');
+  var socket = require('./app/socket');
+  var socketio = require('socket.io');
 
-  socket: function (server) {
-    var io = socketio.listen(server);
-    sup.attachSocket(io);
-  },
+  var _sup = {
 
-  attachSocket: socket,
+    app: function () {
+      return app;
+    },
+
+    socket: function (server) {
+      var io = socketio.listen(server);
+      _sup.attachSocket(io);
+    },
+
+    attachSocket: socket,
+
+  };
+
+  return _sup;
 
 };
 

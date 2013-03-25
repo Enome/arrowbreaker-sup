@@ -1,0 +1,66 @@
+doctype 5
+html(lang='en', ng-app='sup')
+  head
+    meta(charset='utf8')
+    link(href='http://fonts.googleapis.com/css?family=Lato:300,400,700', rel='stylesheet', type='text/css')
+    link(href='/stylus/general.css', rel='stylesheet')
+
+  body
+
+    .page
+
+      .header
+        form(ng-controller='createCtrl', ng-submit='add()')
+          input(type='url', ng-model='url', placeholder='http://', required)
+          button Add
+
+      .urls(ng-controller='urlsCtrl')
+
+        .url(ng-repeat='url in urls', ng-controller='urlCtrl', ng-class='url|css')
+
+          .content(ng-click='select()')
+            h2 {{url|name}}
+            h3 <strong>{{url.ms}}</strong> ms
+
+          .link 
+            a(ng-href='{{url.url}}', title='{{url.url}}', target='_blank'){{url.url|tinyUrl}}
+
+      .modal(ng-controller='modalCtrl', ng-show='display')
+
+        form(ng-submit='submit()')
+
+          h2 {{url.url}}
+
+          input(type='email', placeholder='E-mail', required, ng-model='url.email')
+
+          .warnings
+            h3 Warn me on:
+
+            label
+              input(type='checkbox', ng-model='url.errors')
+              |  Errors
+
+            label
+              input(type='checkbox', ng-model='url._5')
+              |  5xx
+
+            label
+              input(type='checkbox', ng-model='url._4')
+              |  4xx
+
+            label
+              input(type='checkbox', ng-model='url._3')
+              |  3xx
+
+            label
+              input(type='checkbox', ng-model='url._2')
+              |  2xx
+
+          .actions
+            button(type='submit') Update  
+            button.cancel(ng-click='cancel($event)') Cancel
+            button.remove(ng-click='remove($event)') Remove
+
+    script(src='/socket.io/socket.io.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.1/angular.min.js')
+    script(src='client.js')

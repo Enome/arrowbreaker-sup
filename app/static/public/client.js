@@ -1,139 +1,110 @@
-;(function(e,t,n,r){function i(r){if(!n[r]){if(!t[r]){if(e)return e(r);throw new Error("Cannot find module '"+r+"'")}var s=n[r]={exports:{}};t[r][0](function(e){var n=t[r][1][e];return i(n?n:e)},s,s.exports)}return n[r].exports}for(var s=0;s<r.length;s++)i(r[s]);return i})(typeof require!=="undefined"&&require,{1:[function(require,module,exports){var createCtrl = function ($scope, data) {
-
-  $scope.url = '';
-
-  $scope.add = function () {
-    data.add($scope.url);
-    $scope.url = 'http://';
-  };
-
-};
-
-var urlsCtrl = function ($scope, socket) {
-  
-  var set = function (urls) {
-    $scope.urls = urls;
-  };
-
-  socket.on('init', set);
-  socket.on('urls', set);
-
-};
-
-var urlCtrl = function ($scope, events) {
-
-  $scope.select = function () {
-    events.emit('selected url', { url: $scope.url });
-  };
+;(function(e,t,n,r){function i(r){if(!n[r]){if(!t[r]){if(e)return e(r);throw new Error("Cannot find module '"+r+"'")}var s=n[r]={exports:{}};t[r][0](function(e){var n=t[r][1][e];return i(n?n:e)},s,s.exports)}return n[r].exports}for(var s=0;s<r.length;s++)i(r[s]);return i})(typeof require!=="undefined"&&require,{1:[function(require,module,exports){var angular = window.angular;
+var sup = angular.module('sup', []);
 
 
-};
+var filters = require('./filters');
 
-var modalCtrl = function ($scope, events, socket) {
+sup.filter('css', filters.cssFilter);
+sup.filter('name', filters.nameFilter);
+sup.filter('tinyUrl', filters.tinyUrlFilter);
 
-  $scope.display = false;
 
-  events.on('selected url', function (e, args) {
-    $scope.display = true;
-    $scope.url = args.url.url;
-    console.log('true');
-  });
+var services = require('./services');
 
-  $scope.cancel = function () {
-    $scope.display = false;
-  };
+sup.factory('events', services.events);
+sup.factory('socket', services.socket);
 
-  $scope.submit = function () {
 
-    var url = {
+var controller = require('./controllers');
+
+sup.controller('createCtrl', controller.createCtrl);
+sup.controller('urlsCtrl', controller.urlsCtrl);
+sup.controller('urlCtrl', controller.urlCtrl);
+sup.controller('modalCtrl', controller.modalCtrl);
+
+},{"./filters":2,"./services":3,"./controllers":4}],2:[function(require,module,exports){var filters = {
+
+  cssFilter: function () {
+
+    return function (input) {
+
+      if (input.status === 'ENOTFOUND' || input.status === 'ECONNREFUSED' || input.status.toString().indexOf('5') === 0) {
+        return 'error';
+      }
+
+      if (input.status.toString().indexOf('4') === 0) {
+        return 'status-4xx';
+      }
+
+      if (input.status.toString().indexOf('3') === 0) {
+        return 'status-3xx';
+      }
+
+      if (input.status.toString().indexOf('2') === 0) {
+        return 'status-2xx';
+      }
 
     };
 
-    console.log($scope._5xx);
-  };
+  },
+
+  nameFilter: function () {
+
+    return function (input) {
+
+      if (input.status === 'ENOTFOUND') {
+        return 'Not found';
+      }
+
+      if (input.status === 'ECONNREFUSED') {
+        return 'Refushed';
+      }
+
+      return input.status;
+
+    };
+
+  },
+
+  tinyUrlFilter: function () {
+
+    return function (input) {
+
+      input = input.replace(/http(s)?:\/\//, '');
+
+      if (input.length > 20) {
+        input = input.substr(0, 20) + '..';
+      }
+
+      return input;
+
+    };
+
+  }
 
 };
 
+module.exports = filters;
 
-// Filters
+},{}],3:[function(require,module,exports){var services = {
 
-var cssFilter = function () {
+  socket: function ($rootScope) {
 
-  return function (input) {
+    var socket = window.io.connect();
+    var old_on = socket.on.bind(socket);
+    var old_emit = socket.emit.bind(socket);
 
-    if (input.status === 'ENOTFOUND' || input.status === 'ECONNREFUSED' || input.status.toString().indexOf('5') === 0) {
-      return 'error';
-    }
-
-    if (input.status.toString().indexOf('4') === 0) {
-      return 'status-4xx';
-    }
-
-    if (input.status.toString().indexOf('3') === 0) {
-      return 'status-3xx';
-    }
-
-    if (input.status.toString().indexOf('2') === 0) {
-      return 'status-2xx';
-    }
-
-  };
-
-};
-
-var nameFilter = function () {
-
-  return function (input) {
-
-    if (input.status === 'ENOTFOUND') {
-      return 'Not found';
-    }
-
-    if (input.status === 'ECONNREFUSED') {
-      return 'Refushed';
-    }
-
-    return input.status;
-
-  };
-
-};
-
-var tinyUrlFilter = function () {
-
-  return function (input) {
-
-    input = input.replace(/http(s)?:\/\//, '');
-
-    if (input.length > 20) {
-      input = input.substr(0, 20) + '..';
-    }
-
-    return input;
-
-  };
-
-};
-
-// Socket factory
-
-var socketFactory = function ($rootScope) {
-
-  var socket = window.io.connect();
-
-  return {
-
-    on: function (eventName, callback) {
-      socket.on(eventName, function () {
+    var on = function (eventName, callback) {
+      old_on(eventName, function () {
         var args = arguments;
         $rootScope.$apply(function () {
           callback.apply(socket, args);
         });
       });
-    },
+    };
 
-    emit: function (eventName, data, callback) {
-      socket.emit(eventName, data, function () {
+    var emit = function (eventName, data, callback) {
+      old_emit(eventName, data, function () {
         var args = arguments;
         $rootScope.$apply(function () {
           if (callback) {
@@ -141,60 +112,112 @@ var socketFactory = function ($rootScope) {
           }
         });
       });
-    }
-  };
+    };
+
+    socket.on = on;
+    socket.emit = emit;
+
+    return socket;
+
+  },
+
+  events: function ($rootScope) {
+
+    return {
+      on: $rootScope.$on.bind($rootScope),
+      emit: $rootScope.$emit.bind($rootScope)
+    };
+
+  },
 
 };
 
-// Events
+module.exports = services;
 
-var eventsFactory = function ($rootScope) {
+},{}],4:[function(require,module,exports){var controllers = {
 
-  return {
-    on: $rootScope.$on.bind($rootScope),
-    emit: $rootScope.$emit.bind($rootScope)
-  };
+  createCtrl: function ($scope, socket) {
+
+    $scope.url = 'http://enome.be';
+
+    $scope.add = function () {
+      socket.emit('url add', $scope.url);
+      //$scope.url = 'http://';
+    };
+
+  },
+
+  urlsCtrl: function ($scope, socket) {
+    
+    var set = function (urls) {
+      socket.removeAllListeners('ping');
+      $scope.urls = urls;
+      socket.emit('ping cache');
+    };
+
+    socket.emit('get urls', null, set);
+    socket.on('urls update', set);
+
+  },
+
+  urlCtrl: function ($scope, socket, events) {
+
+    $scope.url.status = '';
+    $scope.url.ms = '';
+
+    var setPingResult = function (results) {
+
+      var i, result;
+
+      for (i = 0; i < results.length; i += 1) {
+        if (results[i].url === $scope.url.url) {
+          result = results[i];
+          break;
+        }
+      }
+
+      if (result) {
+        $scope.url.status = result.status;
+        $scope.url.ms = result.ms;
+      }
+    };
+
+    socket.on('ping', setPingResult);
+
+    $scope.select = function () {
+      events.emit('selected url', $scope.url);
+    };
+
+  },
+
+  modalCtrl: function ($scope, events, socket) {
+
+    $scope.display = false;
+
+    events.on('selected url', function (e, args) {
+      $scope.display = true;
+      $scope.url = args;
+    });
+
+    $scope.submit = function () {
+      socket.emit('url update', $scope.url);
+      $scope.display = false;
+    };
+
+    $scope.remove = function (event) {
+      socket.emit('url remove', $scope.url);
+      $scope.display = false;
+    };
+
+    $scope.cancel = function (event) {
+      event.preventDefault();
+      $scope.display = false;
+    };
+
+  }
 
 };
 
-// Data
-
-var dataFactory = function (socket) {
-
-  var urls = {};
-
-  return {
-
-    add: function (url) {
-      urls[url] = {};
-      socket.emit('data changed', urls);
-    },
-
-    update: function (data) {
-      urls[data.url] = data;
-      socket.emit('data changed', urls);
-    }
-
-  };
-
-};
-
-// Init
-
-var angular = window.angular;
-var sup = angular.module('sup', []);
-
-sup.filter('css', cssFilter);
-sup.filter('name', nameFilter);
-sup.filter('tinyUrl', tinyUrlFilter);
-
-sup.factory('events', eventsFactory);
-sup.factory('socket', socketFactory);
-sup.factory('data', dataFactory);
-
-sup.controller('createCtrl', createCtrl);
-sup.controller('urlsCtrl', urlsCtrl);
-sup.controller('urlCtrl', urlCtrl);
-sup.controller('modalCtrl', modalCtrl);
+module.exports = controllers;
 
 },{}]},{},[1]);

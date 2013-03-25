@@ -21,7 +21,7 @@ var pinger = function (domains, t) {
         });
       };
 
-      setInterval(handler, t);
+      interval = setInterval(handler, t);
       handler();
 
     });

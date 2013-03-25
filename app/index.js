@@ -3,10 +3,7 @@ var stylus = require('stylus');
 var nib = require('nib');
 var app = express();
 
-// Middleware
-
-app.set('view engine', 'jade');
-app.set('views', __dirname + '/views');
+// Setup
 
 app.use(stylus.middleware({
   src: __dirname + '/static/src',
@@ -21,8 +18,6 @@ app.use(express.bodyParser());
 
 // Routes
 
-app.get('/', function (req, res) {
-  res.render('index');
-});
+app.get('/', function (req, res) { res.render(__dirname + '/index.jade'); });
 
 module.exports = app;
