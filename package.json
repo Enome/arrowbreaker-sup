@@ -1,22 +1,24 @@
 {
-  "name": "sup",
-  "version": "0.0.0",
-  "description": "ERROR: No README.md file found!",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": "",
-  "author": "",
-  "license": "BSD",
+  "author": "Geert Pasteels <geert.pasteels@gmail.com>",
+  "name": "arrowbreaker-sup",
+  "description": "An Express.js application that pings your urls and warns you about HTTP status code changes by email",
+  "version": "1.0.0",
+  "keywords": [
+    "ping",
+    "monitoring",
+    "uptime",
+    "downtime",
+    "alerts"
+  ],
   "dependencies": {
-    "jade": "~0.28.1",
+    "emailjs": "~0.3.4",
     "express": "~3.1.0",
-    "seequal": "~1.0.0",
-    "async": "~0.2.6",
     "stylus": "~0.32.1",
     "nib": "~0.9.1",
-    "lodash": "~1.0.1",
-    "emailjs": "~0.3.4"
-  }
+    "socket.io": "~0.9.13",
+    "arrr": "~0.1.0",
+    "async": "~0.2.6",
+    "jade": "~0.28.2"
+  },
+  "devDependencies": {}
 }
