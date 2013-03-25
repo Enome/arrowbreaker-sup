@@ -35,7 +35,7 @@ var socket = function (io) {
     });
 
     socket.on('url add', function (url) {
-      data.add({ url: url });
+      data.add({ url: url, _5: true, _4: true, _3: true, _2: true, errors: true });
       pinger.restart();
     });
 

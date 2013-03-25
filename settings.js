@@ -11,7 +11,7 @@ var settings = {
     }
 
     if (typeof sets.email_server === 'undefined') {
-      throw ('Email server is not defined.');
+      console.log('## WARNING: Email server is not defined.');
     }
 
     if (typeof sets.from === 'undefined') {

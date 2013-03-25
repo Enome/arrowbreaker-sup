@@ -17,7 +17,7 @@ var mailer = function (new_results, data, server, from) {
       from: from,
     }, function (err, message) {
       if (err) {
-        console.log('There was a problem with sending the mail:');
+        console.log('There was a problem with sending the email:');
         console.log(err);
       }
     });

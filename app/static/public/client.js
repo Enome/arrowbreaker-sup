@@ -138,11 +138,9 @@ module.exports = services;
 
   createCtrl: function ($scope, socket) {
 
-    $scope.url = 'http://enome.be';
-
     $scope.add = function () {
       socket.emit('url add', $scope.url);
-      //$scope.url = 'http://';
+      $scope.url = '';
     };
 
   },
@@ -193,6 +191,11 @@ module.exports = services;
   modalCtrl: function ($scope, events, socket) {
 
     $scope.display = false;
+    $scope._5 = true;
+    $scope._4 = true;
+    $scope._3 = true;
+    $scope._2 = true;
+    $scope.errors = true;
 
     events.on('selected url', function (e, args) {
       $scope.display = true;

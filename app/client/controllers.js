@@ -2,11 +2,9 @@ var controllers = {
 
   createCtrl: function ($scope, socket) {
 
-    $scope.url = 'http://enome.be';
-
     $scope.add = function () {
       socket.emit('url add', $scope.url);
-      //$scope.url = 'http://';
+      $scope.url = '';
     };
 
   },
