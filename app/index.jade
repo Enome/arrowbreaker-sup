@@ -3,7 +3,8 @@ html(lang='en', ng-app='sup')
   head
     meta(charset='utf8')
     link(href='http://fonts.googleapis.com/css?family=Lato:300,400,700', rel='stylesheet', type='text/css')
-    link(href='/stylus/general.css', rel='stylesheet')
+    link(href=locals.base_url + '/stylus/general.css', rel='stylesheet')
+    link(rel='shortcut icon', href='/favicon.ico')
 
   body
 
@@ -61,6 +62,6 @@ html(lang='en', ng-app='sup')
             button.cancel(ng-click='cancel($event)') Cancel
             button.remove(ng-click='remove($event)') Remove
 
-    script(src='/socket.io/socket.io.js')
     script(src='//cdnjs.cloudflare.com/ajax/libs/angular.js/1.1.1/angular.min.js')
-    script(src='client.js')
+    script(src='/socket.io/socket.io.js')
+    script(src=base_url + '/client.js')

@@ -1,6 +1,8 @@
-// Basic example
+// Run Sup as an express sub-app
 
 var http = require('http');
+var express = require('express');
+var base = express();
 
 // Configuration
 
@@ -21,11 +23,12 @@ var settings = {
 
 };
 
-var sup = require('arrowbreaker-sup')(settings);  // Initialize sup
+var sup = require('arrowbreaker-sup')(settings);     // Initialize sup
+base.use('/sup', sup.app());                // Attach sup to your base app
 
 // Server & Socket
 
-var server = http.createServer(sup.app());  // This returns an Express.js app and creates an http server;
+var server = http.createServer(base);       // Create the server;
 sup.socket(server);                         // Socket IO needs an http server
 
 // Start Server

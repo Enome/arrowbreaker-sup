@@ -1,6 +1,7 @@
-// Basic example
+// Basic example + your own socket.io config
 
 var http = require('http');
+var socketio = require('socket.io');
 
 // Configuration
 
@@ -21,12 +22,15 @@ var settings = {
 
 };
 
-var sup = require('arrowbreaker-sup')(settings);  // Initialize sup
+var sup = require('arrowbreaker-sup')(settings);     // Initialize sup
 
 // Server & Socket
 
 var server = http.createServer(sup.app());  // This returns an Express.js app and creates an http server;
-sup.socket(server);                         // Socket IO needs an http server
+var io = socketio.listen(server);           // Socket.io needs an http server
+
+io.set('log level', 3);                     // Custom socket.io settings
+sup.attachSocket(io);                       // Attach socket.io
 
 // Start Server
 

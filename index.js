@@ -1,10 +1,12 @@
 var sup = function (_settings) {
 
+  // Requirement statements inside the function
+  // because settings might not be defined yet.
+  
   var settings = require('./settings');
   settings.set(_settings);
 
   var app = require('./app');
-  var socket = require('./app/socket');
   var socketio = require('socket.io');
 
   var _sup = {
@@ -15,10 +17,11 @@ var sup = function (_settings) {
 
     socket: function (server) {
       var io = socketio.listen(server);
+      io.set('log level', 0);
       _sup.attachSocket(io);
     },
 
-    attachSocket: socket,
+    attachSocket: require('./app/socket'),
 
   };
 
