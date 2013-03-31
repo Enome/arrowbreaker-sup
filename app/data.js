@@ -1,23 +1,27 @@
 var fs = require('fs');
 var arrr = require('arrr');
-var settings = require('../settings');
 
-var urls = [];
+var data = function (settings) {
 
-var file = settings.get().data_file;
+  var urls = [];
+  var file = settings.data_file;
 
-try {
-  var data = fs.readFileSync(file);
+  try {
+    var file_data = fs.readFileSync(file);
 
-  if (data.length !== 0) {
-    urls = JSON.parse(data);
-  }
-} catch (e) {}
+    if (file_data.length !== 0) {
+      urls = JSON.parse(file_data);
+    }
+  } catch (e) {}
+  
+  var _data = arrr(urls, 'url');
 
-var data = arrr(urls, 'url');
+  _data.on('change', function () {
+    fs.writeFile(file, JSON.stringify(urls));
+  });
 
-data.on('change', function () {
-  fs.writeFile(file, JSON.stringify(urls));
-});
+  return _data;
+
+};
 
 module.exports = data;

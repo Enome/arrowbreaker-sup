@@ -43,7 +43,7 @@ describe('parseResult', function () {
 });
 
 
-describe('diff', function () {
+describe('warnings', function () {
 
   it('returns a warning if new result changed to 200', function () {
 
@@ -151,10 +151,10 @@ describe('diff', function () {
 
   });
 
-  it('returns a warning if new result changed to ECONNREFUSED ', function () {
+  it('returns a warning if new result changed to a custom error', function () {
 
     var results = [
-      { url: 'http://enome.be', new_status: 'ECONNREFUSED', old_status: 100 },
+      { url: 'http://enome.be', new_status: 'FOOBAR', old_status: 100 },
     ];
 
     var urls = [
@@ -165,7 +165,7 @@ describe('diff', function () {
       {
         url: 'http://enome.be',
         old_status: 100,
-        new_status: 'ECONNREFUSED',
+        new_status: 'FOOBAR',
         email: 'geert.pasteels@gmail.com'
       }
     ]);

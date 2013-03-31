@@ -14,7 +14,6 @@ var controllers = {
     var set = function (urls) {
       socket.removeAllListeners('ping');
       $scope.urls = urls;
-      socket.emit('ping cache');
     };
 
     socket.emit('get urls', null, set);
@@ -24,31 +23,29 @@ var controllers = {
 
   urlCtrl: function ($scope, socket, events) {
 
-    $scope.url.status = '';
-    $scope.url.ms = '';
-
-    var setPingResult = function (results) {
-
-      var i, result;
-
-      for (i = 0; i < results.length; i += 1) {
-        if (results[i].url === $scope.url.url) {
-          result = results[i];
-          break;
-        }
-      }
-
-      if (result) {
-        $scope.url.status = result.status;
-        $scope.url.ms = result.ms;
-      }
-    };
-
-    socket.on('ping', setPingResult);
+    $scope.url.status = 'Pinging';
+    $scope.url.ms = '0';
 
     $scope.select = function () {
       events.emit('selected url', $scope.url);
     };
+
+    var pingResults = function () {
+      socket.emit('get results', $scope.url, function (args) {
+        if (args) {
+          $scope.url.status = args.status;
+          $scope.url.ms = args.ms;
+        }
+      });
+    };
+
+    var interval = setInterval(pingResults, 5000);
+
+    pingResults();
+
+    $scope.$on('$destroy', function () {
+      clearInterval(interval);
+    });
 
   },
 

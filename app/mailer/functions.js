@@ -1,21 +1,23 @@
-var checkStatus = function (warnings, result, url, status_code) {
+var isNumber = function (n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
 
-  if (result.new_status.toString().indexOf(status_code) === 0 && url['_' + status_code]) {
+var checkStatus = function (warnings, result, url) {
 
+  if (isNumber(result.new_status) && url['_' + result.new_status.toString().substring(0, 1)]) {
     warnings.push({
       url: url.url,
       old_status: result.old_status,
       new_status: result.new_status,
       email: url.email,
     });
-
   }
 
 };
 
-var checkError = function (warnings, result, url, error) {
+var checkErrors = function (warnings, result, url, error) {
 
-  if (result.new_status === error && url.errors) {
+  if (!isNumber(result.new_status) && url.errors) {
 
     warnings.push({
       url: url.url,
@@ -67,13 +69,8 @@ var functions = {
 
           if (result.new_status !== result.old_status) {
 
-            checkStatus(re, result, url, 2);
-            checkStatus(re, result, url, 3);
-            checkStatus(re, result, url, 4);
-            checkStatus(re, result, url, 5);
-
-            checkError(re, result, url, 'ENOTFOUND');
-            checkError(re, result, url, 'ECONNREFUSED');
+            checkStatus(re, result, url);
+            checkErrors(re, result, url);
 
           }
 

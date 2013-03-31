@@ -3,14 +3,10 @@ var stylus = require('stylus');
 var nib = require('nib');
 var app = express();
 
-// Setup
-
 app.use(stylus.middleware({
   src: __dirname + '/static/src',
   dest: __dirname + '/static/public',
-  compile: function (str, path) {
-    return stylus(str).set('filename', path).use(nib());
-  }
+  compile: function (str, path) { return stylus(str).set('filename', path).use(nib()); }
 }));
 
 app.use(express.favicon(__dirname + '/static/favicon.ico'));

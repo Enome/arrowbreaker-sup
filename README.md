@@ -1,6 +1,6 @@
 # Arrowbreaker: Sup
 
-Sup is an easy to setup web application for Node.js that will ping your urls and warn by email if their HTTP status code changes.
+Sup is an easy to setup web application for Node.js that will ping your urls and warn you by email if their HTTP status code changes.
 
 - link to demo.
 - link arrowbreaker
@@ -33,6 +33,7 @@ var settings = {
 
   from: 'Sup <yourgmail@gmail.com>',        // <optional> Defaults: Sup <sup@arrowbreaker.com>
   interval: 5000,                           // <optional> Defaults: 10000
+  timeout: 2500,                            // <optional> Defaults: 10 seconds
   data_file: __dirname + '/data.json',      // <optional> Defaults: __dirname/data.json
 
 };
@@ -42,7 +43,9 @@ var sup = require('arrowbreaker-sup')(settings); // Initialize sup
 ``` 
 
 - We use the wonderful [emailjs](https://github.com/eleith/emailjs) module. The **email_server** option gets passed directly into email.server.connect method. So check their documentation to for more options. The email server is optional but you wont get an email warnings without it.
-- The **interval** option is the amount of time between each ping. 
+- The **from** option is the email which will show up as the sender. If you are using gmail this will get overwritten by gmail.
+- The **interval** option is the amount of time between each request. 
+- The **timeout** option is the maximum amount of time a request can take.
 - The **data_file** option should point to a file on disk where sup will store your settings in a json format. If the doesn't exist it will be create.
 
 ### Basic (examples/app.js)

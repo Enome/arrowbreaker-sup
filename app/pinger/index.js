@@ -1,40 +1,35 @@
-var EventEmitter = require('events').EventEmitter;
-var http = require('http');
-var https = require('https');
-var async = require('async');
+var ping = require('./functions').ping;
 
-var ping = require('./ping');
+var pinger = function (data, results, settings) {
 
-var pinger = function (domains, t) {
+  var urls = data.all();
+  var pingers = [];
 
-  var ee = new EventEmitter();
+  var startPingers = function () {
 
-  var interval;
+    urls.forEach(function (url) {
+      var p = ping(url.url, settings.interval, settings.timeout);
 
-  ee.start = function () {
+      p.on('ping', function (result) {
+        results.update(result);
+      });
 
-    process.nextTick(function () {
-
-      var handler = function () {
-        async.map(domains, ping, function (err, result) {
-          ee.emit('ping', result);
-        });
-      };
-
-      interval = setInterval(handler, t);
-      handler();
-
+      pingers.push(p);
     });
 
   };
 
+  data.on('change', function () {
 
-  ee.restart = function () {
-    clearInterval(interval);
-    ee.start();
-  };
+    pingers.forEach(function (pinger) {
+      pinger.emit('stop');
+    });
 
-  return ee;
+    startPingers();
+
+  });
+
+  startPingers();
 
 };
 

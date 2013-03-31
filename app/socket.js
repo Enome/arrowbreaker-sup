@@ -1,23 +1,4 @@
-var data = require('./data');
-var mailer = require('./mailer');
-
-var settings = require('../settings').get();
-
-var email_server = settings.email_server;
-var from = settings.from;
-var pinger = require('./pinger')(data.all(), settings.interval);
-
-var socket = function (io) {
-
-  var cache;
-
-  // Init Pinger
-
-  pinger.start();
-
-  pinger.on('ping', function (result) {
-    cache = result;
-  });
+var socket = function (data, results, settings, io) {
 
   // Init Sockets
 
@@ -36,12 +17,10 @@ var socket = function (io) {
 
     socket.on('url add', function (url) {
       data.add({ url: url, _5: true, _4: true, _3: true, _2: true, errors: true });
-      pinger.restart();
     });
 
     socket.on('url remove', function (url) {
-      data.remove(url);
-      pinger.restart();
+      data.remove(url.url);
     });
 
     socket.on('url update', function (url) {
@@ -56,16 +35,10 @@ var socket = function (io) {
       });
     });
 
-
     // Results
 
-    socket.on('ping cache', function () {
-      socket.emit('ping', cache);
-    });
-
-    pinger.on('ping', function (results) {
-      socket.emit('ping', results);
-      mailer(results, data, email_server, from);
+    socket.on('get results', function (url, fn) {
+      fn(results.find(url.url));
     });
 
   });

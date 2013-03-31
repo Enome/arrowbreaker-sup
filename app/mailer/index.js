@@ -2,30 +2,38 @@ var functions = require('./functions');
 
 var old_results = [];
 
-var mailer = function (new_results, data, server, from) {
+var mailer = function (results, data, settings) {
 
-  var parsed_results = functions.parseResult(new_results, old_results);
-  var warnings = functions.warnings(parsed_results, data.all());
-  var emails = functions.createEmails(warnings);
+  var email = function () {
 
-  emails.forEach(function (email) {
+    var parsed_results = functions.parseResult(results, old_results);
+    var warnings = functions.warnings(parsed_results, data.all());
+    var emails = functions.createEmails(warnings);
 
-    server.send({
-      subject: email.subject,
-      text: email.text,
-      to: email.email,
-      from: from,
-    }, function (err, message) {
-      if (err) {
-        console.log('There was a problem with sending the email:');
-        console.log(err);
-      }
+    emails.forEach(function (email) {
+
+      settings.email_server.send({
+        subject: email.subject,
+        text: email.text,
+        to: email.email,
+        from: settings.from,
+      }, function (err, message) {
+        if (err) {
+          console.log('There was a problem with sending the email:');
+          console.log(err);
+        }
+      });
+
     });
 
-  });
+  };
+
+  setInterval(function () {
+    email();
+    old_results = JSON.parse(JSON.stringify(results));
+  }, settings.interval);
 
 
-  old_results = new_results;
 };
 
 

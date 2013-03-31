@@ -17,7 +17,8 @@ var settings = {
   },
 
   from: 'Sup <yourgmail@gmail.com>',        // <optional> Defaults: Sup <sup@arrowbreaker.com>
-  interval: 5000,                           // <optional> Defaults: 10000
+  interval: 5000,                           // <optional> Defaults: 30 seconds
+  timeout: 2500,                            // <optional> Defaults: 10 seconds
   data_file: __dirname + '/data.json',      // <optional> Defaults: __dirname/data.json
 
 };

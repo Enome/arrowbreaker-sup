@@ -4,8 +4,12 @@ var filters = {
 
     return function (input) {
 
-      if (input.status === 'ENOTFOUND' || input.status === 'ECONNREFUSED' || input.status.toString().indexOf('5') === 0) {
+      if (input.status === 'ENOTFOUND' || input.status === 'ECONNREFUSED' || input.status === 'ETIMEDOUT' || input.status.toString().indexOf('5') === 0) {
         return 'error';
+      }
+
+      if (input.status === 'Pinging') {
+        return 'pinging';
       }
 
       if (input.status.toString().indexOf('4') === 0) {
@@ -19,6 +23,7 @@ var filters = {
       if (input.status.toString().indexOf('2') === 0) {
         return 'status-2xx';
       }
+
 
     };
 
@@ -34,6 +39,10 @@ var filters = {
 
       if (input.status === 'ECONNREFUSED') {
         return 'Refushed';
+      }
+
+      if (input.status === 'ETIMEDOUT') {
+        return 'Timeout';
       }
 
       return input.status;
