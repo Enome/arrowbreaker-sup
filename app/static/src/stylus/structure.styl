@@ -1,24 +1,18 @@
-.page
-  margin: 0 auto
-  width: 790px
-
 .header
-  margin: 5em
+  margin: 10px 0 0
   text-align: center
 
 .urls
-  width: 800px
-  overflow: auto
+  text-align: center
+  padding: 5px
 
 .url
   text-align: center
-  width: 188px
-  float: left
-  margin-right: 10px
-  margin-bottom: 20px
+  margin: 5px
   overflow: hidden
   background: dnavy
-  border-radius: 5px
+  display: inline-block
+  width: 95%
 
   h2, h3, h4
     reset-box-model()
@@ -29,16 +23,18 @@
     position: relative
     cursor: pointer
 
+    h2, h3
+      text-align: center
+      width: 100%
+
     h2
       position: absolute
       top: 15px
-      width: 188px
       font-size: 2em
 
     h3
       position: absolute
       bottom: 20px
-      width: 188px
       font-size: 1.5em
 
   .link
@@ -54,9 +50,9 @@
   position: fixed
   top: 50%
   left: 50%
-  margin-left: -325px
+  margin-left: -160px
   margin-top: -165px
-  width: 570px
+  width: 280px
   padding: 20px
   
   box-shadow: 0 0 10px rgba(0,0,0,.30)
@@ -67,14 +63,14 @@
   h2
     reset-box-model()
     font-weight: 300
-    font-size: 1.6em
+    font-size: 1.2em
     margin-bottom: 1em
 
   h3
     font-weight: 300
 
   input[type='email']
-    width: 530px
+    width: 240px
 
   .warnings
     margin: 2em 0

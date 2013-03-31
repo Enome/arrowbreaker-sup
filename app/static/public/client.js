@@ -28,8 +28,12 @@ sup.controller('modalCtrl', controller.modalCtrl);
 
     return function (input) {
 
-      if (input.status === 'ENOTFOUND' || input.status === 'ECONNREFUSED' || input.status.toString().indexOf('5') === 0) {
+      if (input.status === 'ENOTFOUND' || input.status === 'ECONNREFUSED' || input.status === 'ETIMEDOUT' || input.status.toString().indexOf('5') === 0) {
         return 'error';
+      }
+
+      if (input.status === 'Pinging') {
+        return 'pinging';
       }
 
       if (input.status.toString().indexOf('4') === 0) {
@@ -43,6 +47,7 @@ sup.controller('modalCtrl', controller.modalCtrl);
       if (input.status.toString().indexOf('2') === 0) {
         return 'status-2xx';
       }
+
 
     };
 
@@ -58,6 +63,10 @@ sup.controller('modalCtrl', controller.modalCtrl);
 
       if (input.status === 'ECONNREFUSED') {
         return 'Refushed';
+      }
+
+      if (input.status === 'ETIMEDOUT') {
+        return 'Timeout';
       }
 
       return input.status;
@@ -150,7 +159,6 @@ module.exports = services;
     var set = function (urls) {
       socket.removeAllListeners('ping');
       $scope.urls = urls;
-      socket.emit('ping cache');
     };
 
     socket.emit('get urls', null, set);
@@ -160,42 +168,35 @@ module.exports = services;
 
   urlCtrl: function ($scope, socket, events) {
 
-    $scope.url.status = '';
-    $scope.url.ms = '';
-
-    var setPingResult = function (results) {
-
-      var i, result;
-
-      for (i = 0; i < results.length; i += 1) {
-        if (results[i].url === $scope.url.url) {
-          result = results[i];
-          break;
-        }
-      }
-
-      if (result) {
-        $scope.url.status = result.status;
-        $scope.url.ms = result.ms;
-      }
-    };
-
-    socket.on('ping', setPingResult);
+    $scope.url.status = 'Pinging';
+    $scope.url.ms = '0';
 
     $scope.select = function () {
       events.emit('selected url', $scope.url);
     };
+
+    var pingResults = function () {
+      socket.emit('get results', $scope.url, function (args) {
+        if (args) {
+          $scope.url.status = args.status;
+          $scope.url.ms = args.ms;
+        }
+      });
+    };
+
+    var interval = setInterval(pingResults, 5000);
+
+    pingResults();
+
+    $scope.$on('$destroy', function () {
+      clearInterval(interval);
+    });
 
   },
 
   modalCtrl: function ($scope, events, socket) {
 
     $scope.display = false;
-    $scope._5 = true;
-    $scope._4 = true;
-    $scope._3 = true;
-    $scope._2 = true;
-    $scope.errors = true;
 
     events.on('selected url', function (e, args) {
       $scope.display = true;

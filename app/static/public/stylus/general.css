@@ -193,7 +193,7 @@ button {
   font-size: 1.2em;
 }
 input[type='url'] {
-  width: 250px;
+  width: 180px;
   margin-right: 5px;
 }
 button {
@@ -203,6 +203,9 @@ button {
   color: #fff;
   font-weight: 300;
   border: 0 none;
+}
+.pinging .content {
+  background: url("../images/pinger.gif") no-repeat center;
 }
 .error .content {
   background: url("../images/down_red.png") no-repeat center;
@@ -216,28 +219,21 @@ button {
 .status-2xx .content {
   background: url("../images/up_green.png") no-repeat center;
 }
-.page {
-  margin: 0 auto;
-  width: 790px;
-}
 .header {
-  margin: 5em;
+  margin: 10px 0 0;
   text-align: center;
 }
 .urls {
-  width: 800px;
-  overflow: auto;
+  text-align: center;
+  padding: 5px;
 }
 .url {
   text-align: center;
-  width: 188px;
-  float: left;
-  margin-right: 10px;
-  margin-bottom: 20px;
+  margin: 5px;
   overflow: hidden;
   background: #2c3e50;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+  display: inline-block;
+  width: 95%;
 }
 .url h2,
 .url h3,
@@ -253,16 +249,19 @@ button {
   position: relative;
   cursor: pointer;
 }
+.url .content h2,
+.url .content h3 {
+  text-align: center;
+  width: 100%;
+}
 .url .content h2 {
   position: absolute;
   top: 15px;
-  width: 188px;
   font-size: 2em;
 }
 .url .content h3 {
   position: absolute;
   bottom: 20px;
-  width: 188px;
   font-size: 1.5em;
 }
 .url .link {
@@ -278,9 +277,9 @@ button {
   position: fixed;
   top: 50%;
   left: 50%;
-  margin-left: -325px;
+  margin-left: -160px;
   margin-top: -165px;
-  width: 570px;
+  width: 280px;
   padding: 20px;
   -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.3);
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -295,14 +294,14 @@ button {
   border: 0;
   outline: 0;
   font-weight: 300;
-  font-size: 1.6em;
+  font-size: 1.2em;
   margin-bottom: 1em;
 }
 .modal h3 {
   font-weight: 300;
 }
 .modal input[type='email'] {
-  width: 530px;
+  width: 240px;
 }
 .modal .warnings {
   margin: 2em 0;
@@ -324,4 +323,44 @@ button {
 .modal .actions .cancel {
   background: #c0c0c0;
   margin-left: 5px;
+}
+@media screen and (min-width: 420px) {
+  .header {
+    margin: 3em 0;
+  }
+  .url {
+    width: 188px;
+  }
+}
+@media screen and (min-width: 800px) {
+  .header {
+    margin: 3em 0;
+  }
+  input[type='url'] {
+    width: 280px;
+    margin-right: 5px;
+  }
+  .page {
+    margin: 0 auto;
+    width: 790px;
+  }
+  .urls {
+    width: 800px;
+    overflow: auto;
+  }
+  .url {
+    display: block;
+    float: left;
+  }
+  .modal {
+    width: 570px;
+    margin-left: -305px;
+    margin-top: -165px;
+  }
+  .modal h2 {
+    font-size: 1.8em;
+  }
+  .modal input[type='email'] {
+    width: 530px;
+  }
 }
