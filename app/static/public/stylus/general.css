@@ -332,7 +332,7 @@ button {
     width: 188px;
   }
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 990px) {
   .header {
     margin: 3em 0;
   }
@@ -342,10 +342,10 @@ button {
   }
   .page {
     margin: 0 auto;
-    width: 790px;
+    width: 990px;
   }
   .urls {
-    width: 800px;
+    width: 990px;
     overflow: auto;
   }
   .url {
