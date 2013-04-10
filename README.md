@@ -2,12 +2,13 @@
 
 Sup is an easy to setup web application for Node.js that will ping your urls and warn you by email if their HTTP status code changes.
 
-- link to demo.
-- link arrowbreaker
+## Demo
+
+- [link to demo](http://arrowbreaker.com/demos/sup)
 
 ## License
 
-This module is open source but not free. More info soon (link to arrowbreaker)
+This module is open source but not free. Pricing and license on [arrowbreaker.com](http://arrowbreaker.com/apps/sup)
 
 ## Installation
 
@@ -32,8 +33,8 @@ var settings = {
   },
 
   from: 'Sup <yourgmail@gmail.com>',        // <optional> Defaults: Sup <sup@arrowbreaker.com>
-  interval: 5000,                           // <optional> Defaults: 10000
-  timeout: 2500,                            // <optional> Defaults: 10 seconds
+  interval: 60 * 1000,                      // <optional> Defaults: 30 seconds
+  timeout: 10 * 1000,                       // <optional> Defaults: 10 seconds
   data_file: __dirname + '/data.json',      // <optional> Defaults: __dirname/data.json
 
 };
