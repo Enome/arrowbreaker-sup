@@ -62,7 +62,7 @@ sup.controller('modalCtrl', controller.modalCtrl);
       }
 
       if (input.status === 'ECONNREFUSED') {
-        return 'Refushed';
+        return 'Refused';
       }
 
       if (input.status === 'ETIMEDOUT') {

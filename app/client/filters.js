@@ -38,7 +38,7 @@ var filters = {
       }
 
       if (input.status === 'ECONNREFUSED') {
-        return 'Refushed';
+        return 'Refused';
       }
 
       if (input.status === 'ETIMEDOUT') {

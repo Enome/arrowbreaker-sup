@@ -2,7 +2,7 @@
   "author": "Geert Pasteels <geert.pasteels@gmail.com>",
   "name": "arrowbreaker-sup",
   "description": "An Express.js application that pings your urls and warns you about HTTP status code changes by email",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "keywords": [
     "ping",
     "monitoring",
